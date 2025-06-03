@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    # (Optional) If you want to override or document it here:
+    # environment:
+    #   - DATABASE_URL=file:local.db
+    # If you need to persist the SQLite file outside the container:
+    # volumes:
+    #   - ./local.db:/app/local.db
+
