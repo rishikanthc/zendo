@@ -1,31 +1,42 @@
-# 1. Build stage: install dependencies & run SvelteKit build
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │ 1. Build stage: install deps + run SvelteKit build                         │
+# └─────────────────────────────────────────────────────────────────────────────┘
 FROM node:18-alpine AS builder
 WORKDIR /app
 
-# Copy package manifest and lockfile for caching
+# 1a. Copy package.json + lockfile so 'npm ci' can cache layers
 COPY package.json package-lock.json ./
 RUN npm ci
 
-# Copy source and produce a build
+# 1b. Copy the rest of your source (including drizzle.config.json, migrations/)
 COPY . .
 RUN npm run build
 
-# 2. Runtime stage: install only production deps & copy build output
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │ 2. Runtime stage: install deps (including Drizzle CLI), copy build + config │
+# └─────────────────────────────────────────────────────────────────────────────┘
 FROM node:18-alpine AS runtime
 WORKDIR /app
 
-# Set your DATABASE_URL at build‐time so it’s baked into the image
+# 2a. Copy package.json & lockfile, then install ALL dependencies (so Drizzle CLI exists)
+COPY package.json package-lock.json ./
+RUN npm ci
+
+# 2b. Copy drizzle config + migrations so drizzle-kit can see them at runtime
+COPY drizzle.config.ts ./
+COPY src ./src
+
+# 2c. Bake DATABASE_URL into the image (optional if you set via docker-compose)
 ENV DATABASE_URL="file:local.db"
 
-# Copy only package files, install prod deps
-COPY package.json package-lock.json ./
-RUN npm ci --production
-
-# Copy the compiled build artifacts from the builder stage
+# 2d. Copy the built SvelteKit output from the builder stage
 COPY --from=builder /app/build ./build
 
-# Expose the port your SvelteKit app listens on (default: 3000)
-EXPOSE 3000
+# 2e. Copy our entrypoint script (runs migrations first)
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Launch the Node server from the build folder
-CMD ["node", "build"]
+# 2f. Expose the port and set entrypoint + default command
+EXPOSE 3000
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["node", "build/index.js"]
