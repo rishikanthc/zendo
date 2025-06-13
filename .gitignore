@@ -1,6 +1,7 @@
 test-results
 node_modules
 
+/backup
 # Output
 .output
 .vercel
