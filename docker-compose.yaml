@@ -2,9 +2,11 @@ version: "3.8"
 
 services:
   app:
+    # image: ghcr.io/rishikanthc/weeko:v0.1.0
     build:
       context: .
       dockerfile: Dockerfile
+      network: host
     ports:
       - "3000:3000"
     # (Optional) If you want to override or document it here:
