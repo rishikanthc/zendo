@@ -18,7 +18,8 @@ ZenDo is dead simple to use. It features a very simple and beautiful UI. Simply 
 
 ## Installation
 
-ZenDo is distributed as a docker image and can be installed using the docker compose example shown below:
+ZenDo is distributed as a docker image and can be installed using the docker compose example shown below.
+Before deploying make sure to create an empty db file using `touch local.db`. This should be a file and NOT a directory.
 
 ````yaml
 version: "3.8"
@@ -34,8 +35,6 @@ services:
     # If you need to persist the SQLite file outside the container:
     volumes:
       - ./local.db:/app/local.db
-
-
 ````
 
 ## Usage
