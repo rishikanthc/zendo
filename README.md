@@ -1,4 +1,11 @@
-# Weeko
+<p align="center">
+  <img src="https://raw.githubusercontent.com/rishikanthc/zendo/main/static/icon-128x128.png" width="120" alt="Logo"/>
+</p>
+<h1 align="center">Zendo</h1>
+<p align="center">
+  Minimalist weekly task manager.<br>
+  <i>Plan your week, zen-style ✅</i>
+</p>
 
 ZenDo is a minimalistic task manager that is based on weekly planning. It’s a very simple and straightforward to use task manager that allows you to plan your week by assigning tasks to specific days.
 
@@ -62,5 +69,4 @@ Please follow these steps to contribute to development:
 # License
 
 ZenDo is licensed under the MIT license
-
 
