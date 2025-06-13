@@ -9,8 +9,8 @@ export default defineConfig({
 		sveltekit(),
 		SvelteKitPWA({
 			manifest: {
-				name: "Weeko",
-				short_name: "Weeko",
+				name: "ZenDo",
+				short_name: "ZenDo",
 				description: "Self-hosted weekly planner",
 				theme_color: "#FDF6E3",
 				background_color: "#FDF6E3",
