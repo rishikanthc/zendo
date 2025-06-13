@@ -25,7 +25,7 @@ version: "3.8"
 
 services:
   app:
-    image: ghcr.io/rishikanthc/weeko:v0.1.0
+    image: ghcr.io/rishikanthc/zendo:v0.1.0
     ports:
       - "3000:3000"
     # (Optional) If you want to override or document it here:
@@ -43,7 +43,7 @@ services:
 1. Add tasks by entering task description in the input area and hit enter.
 1. Hovering over a task exposes controls to delete the task or move it to another day.
 1. On mobile, swipe right on a task to delete and swipe left to move a task to another day.
-1. ZenDo also has an 8th category called **Someday**. You can think of this as an inbox for you to add tasks temporarily and schedule them to a day later on.
+1. ZenDo also has an 8th category called *Someday*. You can think of this as an inbox for you to add tasks temporarily and schedule them to a day later on.
 
 ## Roadmap
 
