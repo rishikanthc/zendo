@@ -1,7 +1,7 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/rishikanthc/zendo/main/static/icon-128x128.png" width="120" alt="Logo"/>
+  <img src="https://raw.githubusercontent.com/rishikanthc/zendo/main/static/icon-96x96.png" width="96" style="border-radius: 50%; alt="Logo"/>
 </p>
-<h1 align="center">Zendo</h1>
+<h1 align="center">ZenDo</h1>
 <p align="center">
   Minimalist weekly task manager.<br>
   <i>Plan your week, zen-style ✅</i>
@@ -14,6 +14,7 @@ ZenDo is dead simple to use. It features a very simple and beautiful UI. Simply 
 ## Screenshots
 
 ![Zendo](screenshots/zendo.png)
+![Zendo Mobile](screenshots/zendo-mobile.png)
 
 ## Installation
 
