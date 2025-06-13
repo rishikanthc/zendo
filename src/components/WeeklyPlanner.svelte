@@ -415,9 +415,10 @@
 									bind:value={day.newTaskDescription}
 									on:keydown={(e) => handleInputKeydown(e, dayIndex)}
 									class="h-10 flex-grow rounded-md px-3 py-2 text-sm text-[#333333] placeholder:text-[#777777]
-                         focus-visible:ring-2 focus-visible:ring-[#555555] focus-visible:ring-offset-2 focus-visible:outline-none
+                        focus-visible:outline-none
                          disabled:cursor-not-allowed disabled:opacity-50"
 								/>
+								<!-- focus-visible:ring-2 focus-visible:ring-[#555555] focus-visible:ring-offset-2  -->
 							</div>
 
 							{#if day.tasks.length === 0}
@@ -546,8 +547,8 @@
 														<button
 															type="button"
 															on:click={() => void deleteTask(dayIndex, task.id)}
-															class="inline-flex items-center justify-center rounded-md text-sm font-medium whitespace-nowrap
-                                   text-red-600 transition-colors hover:bg-red-500/10
+															class="inline-flex items-center justify-center rounded-md text-sm font-medium
+                                   whitespace-nowrap text-red-600 transition-colors hover:bg-red-500/10
                                    focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:outline-none
                                    disabled:pointer-events-none disabled:opacity-50"
 														>
@@ -569,8 +570,8 @@
 														<!-- Move Popover -->
 														<Popover.Root bind:open={task.popoverOpen}>
 															<Popover.Trigger
-																class="inline-flex items-center justify-center rounded-md text-sm font-medium whitespace-nowrap
-                                     text-blue-600 transition-colors hover:bg-blue-500/10
+																class="inline-flex items-center justify-center rounded-md  text-sm font-medium
+                                     whitespace-nowrap text-blue-600 transition-colors hover:bg-blue-500/10
                                      focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:outline-none
                                      disabled:pointer-events-none disabled:opacity-50"
 															>
@@ -589,31 +590,34 @@
 																<span class="sr-only">Move task</span>
 															</Popover.Trigger>
 
-															<Popover.Content
-																class="z-50 w-36 rounded-lg border border-gray-200 bg-white p-2 shadow-md"
-																sideOffset={5}
-															>
-																<div class="mb-2 px-1 text-xs font-semibold text-gray-500">
-																	Move to:
-																</div>
-																<div class="space-y-1">
-																	{#each days as targetDay, targetIndex}
-																		{#if targetIndex !== dayIndex}
-																			<button
-																				type="button"
-																				on:click={() => {
-																					void moveTask(dayIndex, task, targetIndex);
-																					task.popoverOpen = false;
-																				}}
-																				class="w-full rounded px-2 py-1.5 text-left text-sm text-gray-700
+															<Popover.Portal>
+																<Popover.Content
+																	class="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-36 rounded-lg border border-gray-200 bg-white p-2 shadow-lg"
+																	sideOffset={5}
+																	align="start"
+																>
+																	<div class="mb-2 px-1 text-xs font-semibold text-gray-500">
+																		Move to:
+																	</div>
+																	<div class="space-y-1">
+																		{#each days as targetDay, targetIndex}
+																			{#if targetIndex !== dayIndex}
+																				<button
+																					type="button"
+																					on:click={() => {
+																						void moveTask(dayIndex, task, targetIndex);
+																						task.popoverOpen = false;
+																					}}
+																					class="w-full rounded px-2 py-1.5 text-left text-sm text-gray-700
                                              transition-colors hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
-																			>
-																				{targetDay.name}
-																			</button>
-																		{/if}
-																	{/each}
-																</div>
-															</Popover.Content>
+																				>
+																					{targetDay.name}
+																				</button>
+																			{/if}
+																		{/each}
+																	</div>
+																</Popover.Content>
+															</Popover.Portal>
 														</Popover.Root>
 													{/if}
 												</div>
@@ -622,29 +626,42 @@
 											<!-- Mobile swipe move options overlay -->
 											{#if task.showMoveOptions}
 												<div
-													class="absolute top-0 right-0 bottom-0 left-0 z-20 flex items-center justify-center backdrop-blur-sm"
+													class="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm"
+													on:click={() => resetTaskSwipe(task)}
+													on:touchstart={() => resetTaskSwipe(task)}
 												>
-													<div class="flex flex-wrap justify-center gap-2 p-2">
+													<div
+														class="mx-4 flex max-w-xs flex-wrap justify-center gap-2 rounded-lg border border-gray-200 bg-white p-4 shadow-xl"
+														on:click|stopPropagation
+														on:touchstart|stopPropagation
+													>
+														<div
+															class="mb-3 w-full text-center text-sm font-semibold text-gray-700"
+														>
+															Move task to:
+														</div>
 														{#each days as targetDay, targetIndex}
 															{#if targetIndex !== dayIndex}
 																<button
 																	type="button"
 																	on:click={() => handleMoveFromSwipe(dayIndex, task, targetIndex)}
-																	class="rounded-full bg-blue-100 px-3 py-1.5 text-xs font-medium text-blue-700
-                                       transition-colors hover:bg-blue-200"
+																	class="min-w-0 flex-shrink-0 rounded-full bg-blue-100 px-4 py-2 text-sm
+                                       font-medium text-blue-700 transition-colors hover:bg-blue-200 active:bg-blue-300"
 																>
 																	{targetDay.name}
 																</button>
 															{/if}
 														{/each}
-														<button
-															type="button"
-															on:click={() => resetTaskSwipe(task)}
-															class="rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-700
-                                 transition-colors hover:bg-gray-200"
-														>
-															Cancel
-														</button>
+														<div class="mt-2 flex w-full justify-center">
+															<button
+																type="button"
+																on:click={() => resetTaskSwipe(task)}
+																class="rounded-full bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700
+                                   transition-colors hover:bg-gray-200 active:bg-gray-300"
+															>
+																Cancel
+															</button>
+														</div>
 													</div>
 												</div>
 											{/if}
@@ -686,5 +703,104 @@
 	}
 	.animate-accordion-up {
 		animation: accordion-up 0.2s ease-out;
+	}
+
+	/* Swipe animation classes */
+	@keyframes slide-in-from-top-2 {
+		from {
+			transform: translateY(-8px);
+		}
+		to {
+			transform: translateY(0);
+		}
+	}
+	@keyframes slide-in-from-bottom-2 {
+		from {
+			transform: translateY(8px);
+		}
+		to {
+			transform: translateY(0);
+		}
+	}
+	@keyframes slide-in-from-left-2 {
+		from {
+			transform: translateX(-8px);
+		}
+		to {
+			transform: translateX(0);
+		}
+	}
+	@keyframes slide-in-from-right-2 {
+		from {
+			transform: translateX(8px);
+		}
+		to {
+			transform: translateX(0);
+		}
+	}
+	@keyframes fade-in-0 {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+	@keyframes fade-out-0 {
+		from {
+			opacity: 1;
+		}
+		to {
+			opacity: 0;
+		}
+	}
+	@keyframes zoom-in-95 {
+		from {
+			transform: scale(0.95);
+		}
+		to {
+			transform: scale(1);
+		}
+	}
+	@keyframes zoom-out-95 {
+		from {
+			transform: scale(1);
+		}
+		to {
+			transform: scale(0.95);
+		}
+	}
+
+	.data-\[state\=open\]\:animate-in[data-state='open'] {
+		animation-duration: 150ms;
+		animation-fill-mode: both;
+	}
+	.data-\[state\=closed\]\:animate-out[data-state='closed'] {
+		animation-duration: 150ms;
+		animation-fill-mode: both;
+	}
+	.data-\[state\=closed\]\:fade-out-0[data-state='closed'] {
+		animation-name: fade-out-0;
+	}
+	.data-\[state\=open\]\:fade-in-0[data-state='open'] {
+		animation-name: fade-in-0;
+	}
+	.data-\[state\=closed\]\:zoom-out-95[data-state='closed'] {
+		animation-name: zoom-out-95;
+	}
+	.data-\[state\=open\]\:zoom-in-95[data-state='open'] {
+		animation-name: zoom-in-95;
+	}
+	.data-\[side\=bottom\]\:slide-in-from-top-2[data-side='bottom'] {
+		animation-name: slide-in-from-top-2;
+	}
+	.data-\[side\=left\]\:slide-in-from-right-2[data-side='left'] {
+		animation-name: slide-in-from-right-2;
+	}
+	.data-\[side\=right\]\:slide-in-from-left-2[data-side='right'] {
+		animation-name: slide-in-from-left-2;
+	}
+	.data-\[side\=top\]\:slide-in-from-bottom-2[data-side='top'] {
+		animation-name: slide-in-from-bottom-2;
 	}
 </style>
