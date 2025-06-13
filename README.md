@@ -13,8 +13,8 @@ ZenDo is dead simple to use. It features a very simple and beautiful UI. Simply 
 
 ## Screenshots
 
-![Zendo](screenshots/zendo.png)
-![Zendo Mobile](screenshots/zendo-mobile.png)
+<img src="screenshots/zendo.png" alt="Zendo" width="400">
+<img src="screenshots/zendo-mobile.png" alt="Zendo Mobile" width="250">
 
 ## Installation
 
