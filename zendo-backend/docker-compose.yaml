@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  zendo:
+    build:
+      context: .
+      # dockerfile: Dockerfile.alpine
+      platforms:
+        - linux/amd64
+        - linux/arm64
+    container_name: zendo
+    platform: linux/amd64  # You can change this to linux/arm64 for ARM builds
+    ports:
+      - "8080:8080"
+    environment:
+      - TZ=${TZ:-America/Los_Angeles}
+    volumes:
+      # Persist database and storage files
+      - ./storage:/app/storage
+      # Optional: Mount whisper models for faster startup (if you have them locally)
+      # - ./whisper-models:/app/whisper-models
+    restart: unless-stopped

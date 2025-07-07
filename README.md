@@ -11,10 +11,22 @@ ZenDo is a minimalistic task manager that is based on weekly planning. It’s a 
 
 ZenDo is dead simple to use. It features a very simple and beautiful UI. Simply assign tasks to days of the week. ZenDo also has PWA support, allowing you to install and use ZenDo as an app on desktop and mobile platforms.
 
+## Features
+
+* Minimalistic, uncluttered and beautiful UI
+* Weekly planning
+* Calendar for jumping to any particular week/day
+* 3 different views: weekly-card, todays tasks, weeks tasks
+* Tag based organization and filtering
+* Task completion progress
+* PWA support
+* NLP dates to jump via calendar
+
 ## Screenshots
 
-<img src="screenshots/zendo.png" alt="Zendo" width="400">
-<img src="screenshots/zendo-mobile.png" alt="Zendo Mobile" width="250">
+<img src="screenshots/week-card-layout.png" alt="Zendo" width="400">
+<img src="screenshots/todays-tasks.png" alt="Zendo Today view" width="250">
+<img src="screenshots/weeks-tasks.png" alt="Zendo Week view" width="250">
 
 ## Installation
 
@@ -26,23 +38,15 @@ version: "3.8"
 
 services:
   app:
-    image: ghcr.io/rishikanthc/zendo:v0.1.0
+    image: ghcr.io/rishikanthc/zendo:v0.2.0
     ports:
-      - "3000:3000"
-    # (Optional) If you want to override or document it here:
-    # environment:
-    #   - DATABASE_URL=file:local.db
-    # If you need to persist the SQLite file outside the container:
+      - "8080:8080"
+    environment:
+      - TZ=${TZ:-America/Los_Angeles}
     volumes:
-      - ./local.db:/app/local.db
+      - ./storage:/app/storage
+    restart: unless-stopped
 ````
-
-## Usage
-
-1. Add tasks by entering task description in the input area and hit enter.
-1. Hovering over a task exposes controls to delete the task or move it to another day.
-1. On mobile, swipe right on a task to delete and swipe left to move a task to another day.
-1. ZenDo also has an 8th category called *Someday*. You can think of this as an inbox for you to add tasks temporarily and schedule them to a day later on.
 
 ## Roadmap
 
